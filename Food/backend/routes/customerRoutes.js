@@ -11,27 +11,29 @@ const {
 
 router.post('/add-customer', async (req, res) => {
     const db = await connectToDatabase();
-    addCustomer(req, res, db);
+    await addCustomer(req, res, db); // Added await for consistency
 });
 
 router.get('/customers', async (req, res) => {
     const db = await connectToDatabase();
-    getCustomers(req, res, db);
+
+    if (req.query.firstName && req.query.lastName) {
+        // If firstName and lastName are provided, call getCustomerByName
+        await getCustomerByName(req, res, db); // Added await for consistency
+    } else {
+        // Otherwise, call getCustomers to fetch all customers
+        await getCustomers(req, res, db); // Added await for consistency
+    }
 });
 
 router.put('/update-customer/:id', async (req, res) => {
     const db = await connectToDatabase();
-    updateCustomer(req, res, db);
+    await updateCustomer(req, res, db); // Added await for consistency
 });
 
 router.delete('/delete-customer/:id', async (req, res) => {
     const db = await connectToDatabase();
-    deleteCustomer(req, res, db);
-});
-
-router.get('/get-customer-by-name', async (req, res) => {
-    const db = await connectToDatabase();
-    getCustomerByName(req, res, db);
+    await deleteCustomer(req, res, db); // Added await for consistency
 });
 
 module.exports = router;

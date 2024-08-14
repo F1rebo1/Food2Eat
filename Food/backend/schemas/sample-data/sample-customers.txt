@@ -1,0 +1,27 @@
+{
+    "firstName": "Shruti",
+    "lastName": "Asolkar",
+    "email": "shrutiasolkar01@gmail.com",
+    "phone": "5132373457",
+    "dob": "2001-10-30T00:00:00.000Z",
+    "restaurantInfo": {
+        "allOrders": [],
+        "favorites": [],
+        "recentOrders": []
+    },
+    "isAdmin": false
+}
+
+{
+    "firstName": "Rohan",
+    "lastName": "Shanbhag",
+    "email": "rohanshanbhag2001@gmail.com",
+    "phone": "6124814895",
+    "dob": "2001-02-18T00:00:00.000Z",
+    "restaurantInfo": {
+        "allOrders": [],
+        "favorites": [],
+        "recentOrders": []
+    },
+    "isAdmin": true
+}

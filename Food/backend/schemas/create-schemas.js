@@ -15,40 +15,42 @@ async function createCollectionWithSchema() {
                 $jsonSchema: {
                     bsonType: "object",
                     title: "OrderDetails",
-                    required: ["_id", "product", "price", "quantity", "date", "timestamp", "restaurant"],
+                    required: ["_id", "customerId", "menuItemId", "restaurantId", "quantity", "date", "timestamp"],
                     properties: {
                         _id: {
                             bsonType: "objectId"
                         },
-                        product: {
-                            bsonType: "string"
+                        customerId: {
+                            bsonType: "objectId"  // References the _id from the CustomerInfo collection
                         },
-                        price: {
-                            bsonType: "number"
+                        menuItemId: {
+                            bsonType: "objectId"  // References the _id from the Menu collection
+                        },
+                        restaurantId: {
+                            bsonType: "objectId"  // References the _id from the RestaurantInfo collection
                         },
                         quantity: {
-                            bsonType: "number"
+                            bsonType: "int"
                         },
                         date: {
                             bsonType: "date"
                         },
                         timestamp: {
-                            bsonType: "date"  // Changed from "timestamp" to "date"
-                        },
-                        restaurant: {
-                            bsonType: "objectId"
+                            bsonType: "date"
                         }
                     }
                 }
             }
         });
 
+        console.log("OrderDetails created with schema:", orderDetails.collectionName);
+
         const customerInfo = await database.createCollection("CustomerInfo", {
             validator: {
                 $jsonSchema: {
                     bsonType: "object",
                     title: "CustomerInfo",
-                    required: ["_id", "firstName", "lastName", "email", "phone", "dob", "timestamp"],
+                    required: ["_id", "firstName", "lastName", "email", "phone", "dob", "timestamp", "isAdmin"],
                     properties: {
                         _id: {
                             bsonType: "objectId"
@@ -69,10 +71,14 @@ async function createCollectionWithSchema() {
                             bsonType: "date"
                         },
                         timestamp: {
-                            bsonType: "date"  // Changed from "timestamp" to "date"
+                            bsonType: "date"
                         },
+                        isAdmin: {
+                            bsonType: "bool"
+                        },
+                        // Define restaurantInfo as an object
                         restaurantInfo: {
-                            bsonType: "object",  // Define restaurantInfo as an object
+                            bsonType: "object",
                             properties: {
                                 allOrders: {
                                     bsonType: "array",  // Define allOrders as an array
@@ -83,13 +89,15 @@ async function createCollectionWithSchema() {
                                 favorites: {
                                     bsonType: "array",  // Define favorites as an array
                                     items: {
-                                        bsonType: "objectId"  // Each item in the array is an ObjectId
+                                        bsonType: "objectId",  // Each item in the array is an ObjectId
+                                        description: "References the _id field in RestaurantInfo"
                                     }
                                 },
                                 recentOrders: {
                                     bsonType: "array",  // Define recentOrders as an array
                                     items: {
-                                        bsonType: "objectId"  // Each item in the array is an ObjectId
+                                        bsonType: "objectId",  // Each item in the array is an ObjectId
+                                        description: "References the _id field in OrderDetails"
                                     }
                                 }
                             }
@@ -99,8 +107,68 @@ async function createCollectionWithSchema() {
             }
         });
 
-        console.log("OrderDetails created with schema:", orderDetails.collectionName);
         console.log("CustomerInfo created with schema:", customerInfo.collectionName);
+
+        const menuInfo = await database.createCollection("Menu", {
+            validator: {
+                $jsonSchema: {
+                    bsonType: "object",
+                    title: "Menu",
+                    required: ["_id", "restaurantId", "itemName", "price", "categories"],
+                    properties: {
+                        _id: {
+                            bsonType: "objectId"
+                        },
+                        restaurantId: {
+                            bsonType: "objectId"  // References the _id from the RestaurantInfo collection
+                        },
+                        itemName: {
+                            bsonType: "string"
+                        },
+                        price: {
+                            bsonType: "double"
+                        },
+                        categories: {
+                            bsonType: "array",
+                            items: {
+                                bsonType: "string"
+                            }
+                        },
+                        pictureURL: {
+                            bsonType: "string"
+                        },
+                    }
+                }
+            }
+        });
+
+        console.log("MenuInfo created with schema:", menuInfo.collectionName);
+
+        const restaurantInfo = await database.createCollection("RestaurantInfo", {
+            validator: {
+                $jsonSchema: {
+                    bsonType: "object",
+                    title: "RestaurantInfo",
+                    required: ["_id", "restaurantName", "address", "rating"],
+                    properties: {
+                        _id: {
+                            bsonType: "objectId"
+                        },
+                        restaurantName: {
+                            bsonType: "string"
+                        },
+                        address: {
+                            bsonType: "string"
+                        },
+                        rating: {
+                            bsonType: "double"
+                        },
+                    }
+                }
+            }
+        });
+
+        console.log("RestaurantInfo created with schema:", restaurantInfo.collectionName);
     } finally {
         await client.close();
     }

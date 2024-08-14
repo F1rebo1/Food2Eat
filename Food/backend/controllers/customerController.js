@@ -10,10 +10,11 @@ const addCustomer = async (req, res, db) => {
             dob: new Date(req.body.dob),
             timestamp: new Date(),
             restaurantInfo: {
-                allOrders: req.body.allOrders || [],
-                favorites: req.body.favorites || [],
-                recentOrders: req.body.recentOrders || []
-            }
+                allOrders: req.body.allOrders.map(orderId => new ObjectId(orderId)), // Ensuring allOrders are ObjectIds
+                favorites: req.body.favorites.map(restaurantId => new ObjectId(restaurantId)), // Ensuring favorites are ObjectIds
+                recentOrders: req.body.recentOrders.map(orderId => new ObjectId(orderId)) // Ensuring recentOrders are ObjectIds
+            },
+            isAdmin: req.body.isAdmin
         };
 
         const result = await db.collection('CustomerInfo').insertOne(customerData);
@@ -35,11 +36,36 @@ const getCustomers = async (req, res, db) => {
 const updateCustomer = async (req, res, db) => {
     try {
         const customerId = req.params.id;
-        const newLastName = 'Asolkar';
+        const updateFields = {};
+
+        // Conditionally add fields to the update object based on what is in req.body
+        if (req.body.newFirstName) {
+            updateFields.firstName = req.body.newFirstName;
+        }
+        if (req.body.newLastName) {
+            updateFields.lastName = req.body.newLastName;
+        }
+        if (req.body.newEmail) {
+            updateFields.email = req.body.newEmail;
+        }
+        if (req.body.newPhone) {
+            updateFields.phone = req.body.newPhone;
+        }
+        if (req.body.newFavorites) {
+            updateFields['restaurantInfo.favorites'] = req.body.newFavorites.map(restaurantId => new ObjectId(restaurantId));
+        }
+        if (req.body.newRecentOrders) {
+            updateFields['restaurantInfo.recentOrders'] = req.body.newRecentOrders.map(orderId => new ObjectId(orderId));
+        }
+
+        // If no fields were provided, return an error
+        if (Object.keys(updateFields).length === 0) {
+            return res.status(400).json({ error: 'No fields provided to update' });
+        }
 
         const result = await db.collection('CustomerInfo').updateOne(
             { _id: new ObjectId(customerId) },
-            { $set: { lastName: newLastName } }
+            { $set: updateFields }
         );
 
         if (result.modifiedCount > 0) {

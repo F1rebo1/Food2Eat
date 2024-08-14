@@ -1,0 +1,29 @@
+{
+    "itemName": "Pongal",
+    "price": 7.99,
+    "categories": [
+        "vegan",
+        "vegetarian",
+        "gluten free"
+    ],
+    "pictureURL": "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/01/pongal-ven-pongal-500x500.jpg"
+}
+
+{
+    "itemName": "Butter Chicken",
+    "price": 12.99,
+    "categories": [
+        "spicy"
+    ],
+    "pictureURL": "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg"
+}
+
+{
+    "itemName": "Ghee Roast Dosa",
+    "price": 11.99,
+    "categories": [
+        "vegan",
+        "vegetarian"
+    ],
+    "pictureURL": "https://media-cdn.tripadvisor.com/media/photo-s/0a/1b/b7/43/ghee-roast.jpg"
+}
