@@ -1,0 +1,15 @@
+const { MongoClient } = require('mongodb');
+require('dotenv').config({ path: '.env.local' });
+
+const uri = process.env.MONGODB_URI;
+let db;
+
+const connectToDatabase = async () => {
+    if (db) return db;
+    const client = await MongoClient.connect(uri);
+    db = client.db('Food-Backend-DB');
+    console.log('Connected to Database');
+    return db;
+};
+
+module.exports = connectToDatabase;

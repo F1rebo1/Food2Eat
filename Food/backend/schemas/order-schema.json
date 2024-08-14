@@ -1,0 +1,35 @@
+{
+  "title": "OrderDetails",
+  "required": [
+    "_id",
+    "product",
+    "price",
+    "quantity",
+    "date",
+    "timestamp",
+    "account"
+  ],
+  "properties": {
+    "_id": {
+      "bsonType": "objectId"
+    },
+    "product": {
+      "bsonType": "string"
+    },
+    "price": {
+      "bsonType": "number"
+    },
+    "quantity": {
+      "bsonType": "number"
+    },
+    "date": {
+      "bsonType": "date"
+    },
+    "timestamp": {
+      "bsonType": "timestamp"
+    },
+    "account": {
+      "bsonType": "string"
+    }
+  }
+}
