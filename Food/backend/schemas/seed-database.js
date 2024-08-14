@@ -57,10 +57,10 @@ async function seedDatabase() {
         // 3. Insert Customers
         const customerInfo = database.collection("CustomerInfo");
         const shruti = await customerInfo.insertOne({
-            firstName: "Shruti",
-            lastName: "Asolkar",
-            email: "shrutiasolkar01@gmail.com",
-            phone: "5132373457",
+            firstName: "Jane",
+            lastName: "Doe",
+            email: "janedoe@gmail.com",
+            phone: "987654321",
             dob: new Date("2001-10-30T00:00:00.000Z"),
             timestamp: new Date(),
             restaurantInfo: {
@@ -71,10 +71,10 @@ async function seedDatabase() {
             isAdmin: false
         });
         const rohan = await customerInfo.insertOne({
-            firstName: "Rohan",
-            lastName: "Shanbhag",
-            email: "rohanshanbhag2001@gmail.com",
-            phone: "6124814895",
+            firstName: "John",
+            lastName: "Doe",
+            email: "johndoe@gmail.com",
+            phone: "123456789",
             dob: new Date("2001-02-18T00:00:00.000Z"),
             timestamp: new Date(),
             restaurantInfo: {
