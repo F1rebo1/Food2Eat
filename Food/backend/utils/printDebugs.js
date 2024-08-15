@@ -1,3 +1,3 @@
 const debug = true;
 
-module.exports = debug;
+export default debug;

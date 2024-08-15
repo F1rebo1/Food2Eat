@@ -1,6 +1,6 @@
-const { ObjectId } = require('mongodb');
+import { ObjectId } from 'mongodb';
 
-const debug = require('../utils/printDebugs');
+import debug from '../utils/printDebugs.js';
 
 const addMenuItem = async (req, res, db) => {
     try {
@@ -107,7 +107,7 @@ const deleteMenuItem = async (req, res, db) => {
     }
 };
 
-module.exports = {
+export default {
     addMenuItem,
     getAllMenuItems,
     updateMenuItem,
