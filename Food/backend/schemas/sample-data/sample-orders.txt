@@ -1,0 +1,10 @@
+{
+    "itemName": "Pongal",
+    "price": 7.99,
+    "categories": [
+        "vegan",
+        "vegetarian",
+        "gluten free"
+    ],
+    "pictureURL": "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/01/pongal-ven-pongal-500x500.jpg"
+}

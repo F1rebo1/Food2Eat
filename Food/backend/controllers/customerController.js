@@ -1,7 +1,10 @@
 const { ObjectId } = require('mongodb');
 
+const debug = require('../utils/printDebugs');
+
 const addCustomer = async (req, res, db) => {
     try {
+        if (debug) console.log("[customerController.js - addCustomer]");
         const customerData = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -26,6 +29,9 @@ const addCustomer = async (req, res, db) => {
 
 const getCustomers = async (req, res, db) => {
     try {
+        console.log("debug: " + debug);
+
+        if (debug) console.log("[customerController.js - getCustomers]");
         const customers = await db.collection('CustomerInfo').find().toArray();
         res.status(200).json(customers);
     } catch (err) {
@@ -33,8 +39,26 @@ const getCustomers = async (req, res, db) => {
     }
 };
 
+const getCustomerByName = async (req, res, db) => {
+    try {
+        if (debug) console.log("[customerController.js - getCustomerByName]");
+        const firstName = req.query.firstName;
+        const lastName = req.query.lastName;
+
+        const result = await db.collection('CustomerInfo').find({
+            firstName: { $eq: firstName },
+            lastName: { $eq: lastName }
+        }).toArray();
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ error: 'Could not retrieve customer information', details: err.message });
+    }
+};
+
 const updateCustomer = async (req, res, db) => {
     try {
+        if (debug) console.log("[customerController.js - updateCustomer]");
         const customerId = req.params.id;
         const updateFields = {};
 
@@ -80,6 +104,7 @@ const updateCustomer = async (req, res, db) => {
 
 const deleteCustomer = async (req, res, db) => {
     try {
+        if (debug) console.log("[customerController.js - deleteCustomer]");
         const customerId = req.params.id;
 
         const result = await db.collection('CustomerInfo').deleteOne(
@@ -93,22 +118,6 @@ const deleteCustomer = async (req, res, db) => {
         }
     } catch (err) {
         res.status(500).json({ error: 'Failed to delete customer', details: err.message });
-    }
-};
-
-const getCustomerByName = async (req, res, db) => {
-    try {
-        const firstName = req.query.firstName;
-        const lastName = req.query.lastName;
-
-        const result = await db.collection('CustomerInfo').find({
-            firstName: { $eq: firstName },
-            lastName: { $eq: lastName }
-        }).toArray();
-
-        res.status(200).json(result);
-    } catch (err) {
-        res.status(500).json({ error: 'Could not retrieve customer information', details: err.message });
     }
 };
 

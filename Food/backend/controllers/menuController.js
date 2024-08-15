@@ -1,7 +1,10 @@
 const { ObjectId } = require('mongodb');
 
+const debug = require('../utils/printDebugs');
+
 const addMenuItem = async (req, res, db) => {
     try {
+        if (debug) console.log("[menuController.js - addMenuItem]");
         const menuData = {
             restaurantId: new ObjectId(req.body.restaurantId), // Added to link menu item to a restaurant
             itemName: req.body.itemName,
@@ -21,6 +24,7 @@ const addMenuItem = async (req, res, db) => {
 
 const getAllMenuItems = async (req, res, db) => {
     try {
+        if (debug) console.log("[menuController.js - getAllMenuItems]");
         const items = await db.collection('Menu').find().toArray();
         res.status(200).json(items);
     } catch (err) {
@@ -30,6 +34,7 @@ const getAllMenuItems = async (req, res, db) => {
 
 const getMenuItem = async (req, res, db) => {
     try {
+        if (debug) console.log("[menuController.js - getMenuItem]");
         const itemName = req.query.itemName;
 
         const result = await db.collection('Menu').find({
@@ -44,6 +49,7 @@ const getMenuItem = async (req, res, db) => {
 
 const updateMenuItem = async (req, res, db) => {
     try {
+        if (debug) console.log("[menuController.js - updateMenuItem]");
         const itemId = req.params.id;
         const updateFields = {};
 
@@ -84,6 +90,7 @@ const updateMenuItem = async (req, res, db) => {
 
 const deleteMenuItem = async (req, res, db) => {
     try {
+        if (debug) console.log("[menuController.js - deleteMenuItem]");
         const itemId = req.params.id;
 
         const result = await db.collection('Menu').deleteOne(

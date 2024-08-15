@@ -1,7 +1,10 @@
 const { ObjectId } = require('mongodb');
 
+const debug = require('../utils/printDebugs');
+
 const addRestaurant = async (req, res, db) => {
     try {
+        if (debug) console.log("[restaurantController.js - addRestaurant]");
         const restaurantData = {
             restaurantName: req.body.restaurantName,
             address: req.body.address,
@@ -17,6 +20,7 @@ const addRestaurant = async (req, res, db) => {
 
 const getAllRestaurants = async (req, res, db) => {
     try {
+        if (debug) console.log("[restaurantController.js - getAllRestaurants]");
         const restaurants = await db.collection('RestaurantInfo').find().toArray();
         res.status(200).json(restaurants);
     } catch (err) {
@@ -26,6 +30,7 @@ const getAllRestaurants = async (req, res, db) => {
 
 const getRestaurantByName = async (req, res, db) => {
     try {
+        if (debug) console.log("[restaurantController.js - getRestaurantByName]");
         const restaurantName = req.query.restaurantName;
 
         const result = await db.collection('RestaurantInfo').find({
@@ -40,6 +45,7 @@ const getRestaurantByName = async (req, res, db) => {
 
 const updateRestaurant = async (req, res, db) => {
     try {
+        if (debug) console.log("[restaurantController.js - updateRestaurant]");
         const restaurantId = req.params.id;
         const updateFields = {};
 
@@ -77,6 +83,7 @@ const updateRestaurant = async (req, res, db) => {
 
 const deleteRestaurant = async (req, res, db) => {
     try {
+        if (debug) console.log("[restaurantController.js - deleteRestaurant]");
         const restaurantId = req.params.id;  // Use params.id instead of body.id
         const isAdmin = req.body.isAdmin;
 

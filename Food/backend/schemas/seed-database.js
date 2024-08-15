@@ -56,7 +56,7 @@ async function seedDatabase() {
 
         // 3. Insert Customers
         const customerInfo = database.collection("CustomerInfo");
-        const shruti = await customerInfo.insertOne({
+        const cust1 = await customerInfo.insertOne({
             firstName: "Jane",
             lastName: "Doe",
             email: "janedoe@gmail.com",
@@ -70,7 +70,7 @@ async function seedDatabase() {
             },
             isAdmin: false
         });
-        const rohan = await customerInfo.insertOne({
+        const cust2 = await customerInfo.insertOne({
             firstName: "John",
             lastName: "Doe",
             email: "johndoe@gmail.com",
@@ -85,13 +85,13 @@ async function seedDatabase() {
             isAdmin: true
         });
 
-        console.log("Inserted Customers:", shruti.insertedId, rohan.insertedId);
+        console.log("Inserted Customers:", cust1.insertedId, cust2.insertedId);
 
         // 4. Insert Orders (using the menu items and customer IDs)
         const orderDetails = database.collection("OrderDetails");
         try {
             const order1 = await orderDetails.insertOne({
-                customerId: shruti.insertedId,
+                customerId: cust1.insertedId,
                 menuItemId: pongal.insertedId,
                 restaurantId: veganBistro.insertedId,
                 quantity: 2,
@@ -108,7 +108,7 @@ async function seedDatabase() {
 
         try {
             const order2 = await orderDetails.insertOne({
-                customerId: rohan.insertedId,
+                customerId: cust2.insertedId,
                 menuItemId: butterChicken.insertedId,
                 restaurantId: spicyPalace.insertedId,
                 quantity: 1,

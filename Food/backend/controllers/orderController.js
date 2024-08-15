@@ -1,7 +1,10 @@
 const { ObjectId } = require('mongodb');
 
+const debug = require('../utils/printDebugs');
+
 const addOrder = async (req, res, db) => {
     try {
+        if (debug) console.log("[orderController.js - addOrder]");
         const orderData = {
             customerId: new ObjectId(req.body.customerId),
             menuItemId: new ObjectId(req.body.menuItemId),
@@ -20,6 +23,7 @@ const addOrder = async (req, res, db) => {
 
 const getAllOrders = async (req, res, db) => {
     try {
+        if (debug) console.log("[orderController.js - getAllOrders]");
         const orders = await db.collection('OrderDetails').find().toArray();
         res.status(200).json(orders);
     } catch (err) {
@@ -29,6 +33,7 @@ const getAllOrders = async (req, res, db) => {
 
 const getOrderByCustomerId = async (req, res, db) => {
     try {
+        if (debug) console.log("[orderController.js - getOrderByCustomerId]");
         const customerId = new ObjectId(req.query.customerId);
 
         const result = await db.collection('OrderDetails').find({
@@ -43,6 +48,7 @@ const getOrderByCustomerId = async (req, res, db) => {
 
 const updateOrder = async (req, res, db) => {
     try {
+        if (debug) console.log("[orderController.js - updateOrder]");
         const orderId = req.params.id;
         const updateFields = {};
 
@@ -74,6 +80,7 @@ const updateOrder = async (req, res, db) => {
 
 const deleteOrder = async (req, res, db) => {
     try {
+        if (debug) console.log("[orderController.js - deleteOrder]");
         const orderId = req.params.id;
 
         const result = await db.collection('OrderDetails').deleteOne(
