@@ -23,16 +23,75 @@ const addMenuItem = async (req, res, db) => {
     }
 };
 
+// TODO: Find all menu items BY RESTAURANT -- I need to pass in a restaurant name, and get all menu items for that restaurant only
+// FROM RestaurantInfo GET RestaurantInfo.restaurantName WHERE RestaurantInfo.id == Menu.restaurantId
+// const getAllMenuItems = async (req, res, db) => {
+//     try {
+//         if (debug) console.log("[menuController.js - getAllMenuItems]");
+//         const items = await db.collection('Menu').find().toArray();
+//         res.status(200).json(items);
+//     } catch (err) {
+//         res.status(500).json({ error: 'Failed to fetch menu items', details: err.message });
+//     }
+// };
+
 const getAllMenuItems = async (req, res, db) => {
     try {
         if (debug) console.log("[menuController.js - getAllMenuItems]");
-        const items = await db.collection('Menu').find().toArray();
+
+        // Find the restaurant ID based on the restaurant name from the query parameter
+        const restaurant = await db.collection('RestaurantInfo').findOne({ 
+            restaurantName: req.query.restaurantName 
+        });
+
+        if (!restaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+
+        const restId = restaurant._id;
+
+        // Now use the restaurant ID to get all the menu items for that restaurant
+        const itemsCursor = db.collection('Menu').aggregate([
+            {
+              $match: { restaurantId: restId } // Match only menu items with the found restaurant ID
+            },
+            {
+              $lookup: {
+                from: "RestaurantInfo", // The collection to join (RestaurantInfo)
+                localField: "restaurantId", // Field from the Menu collection
+                foreignField: "_id", // Field from the RestaurantInfo collection
+                as: "restaurantInfo" // The name of the new array field in the results
+              }
+            },
+            {
+              $unwind: "$restaurantInfo" // Unwind the array so that each document contains the restaurant info
+            },
+            {
+              $project: {
+                _id: 0, // Exclude the _id from the Menu collection
+                itemName: 1, // Keep fields from the Menu collection (customize this based on your schema)
+                price: 1,
+                categories: 1,
+                description: 1,
+                src: 1,
+                restaurantName: "$restaurantInfo.restaurantName" // Project the restaurant name from the joined data
+              }
+            }
+        ]);
+
+        // Convert the cursor to an array
+        const items = await itemsCursor.toArray();
+
+        console.log("items: ", items);
+
         res.status(200).json(items);
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch menu items', details: err.message });
     }
 };
 
+
+// TODO: GET correct Restaurant AND correct Menu item specified in req.query
 const getMenuItem = async (req, res, db) => {
     try {
         if (debug) console.log("[menuController.js - getMenuItem]");

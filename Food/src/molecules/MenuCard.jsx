@@ -16,52 +16,9 @@ import clsx from "clsx";
 // description: "A chicken curry made with a spiced tomato and butter (makhan) sauce",
 // pictureURL: "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg"
 
-const cardList = [
-    {
-        description: "Ven Pongal",
-        title: "Pongal",
-        src: "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/01/pongal-ven-pongal-500x500.jpg",
-        ctaText: "Order",
-        ctaLink: "https://ui.aceternity.com/templates",
-        content: "A rice and lentil porridge, made with black pepper, ginger, turmeric, cashews, cumin, curry leaves, ghee (clarified butter), mung beans, and salt"
-    },
-    {
-        description: "Babbu Maan",
-        title: "Mitran Di Chhatri",
-        src: "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg",
-        ctaText: "Order",
-        ctaLink: "https://ui.aceternity.com/templates",
-        content: "Babu Maan, a legendary Punjabi singer, is renowned for his soulful"
-    },
-
-    {
-        description: "Metallica",
-        title: "For Whom The Bell Tolls",
-        src: "https://assets.aceternity.com/demos/metallica.jpeg",
-        ctaText: "Order",
-        ctaLink: "https://ui.aceternity.com/templates",
-        content: "Metallica, an iconic American heavy metal band, is renowned for their"
-    },
-    {
-        description: "Led Zeppelin",
-        title: "Stairway To Heaven",
-        src: "https://assets.aceternity.com/demos/led-zeppelin.jpeg",
-        ctaText: "Order",
-        ctaLink: "https://ui.aceternity.com/templates",
-        content: "Led Zeppelin, a legendary British rock band, is renowned for their"
-    },
-    {
-        description: "Mustafa Zahid",
-        title: "Toh Phir Aao",
-        src: "https://assets.aceternity.com/demos/toh-phir-aao.jpeg",
-        ctaText: "Order",
-        ctaLink: "https://ui.aceternity.com/templates",
-        content: "renowned for its intense storyline and powerful performances. Directed"
-    },
-];
-
 async function getMenuItems() {
-    const url = "http://localhost:8080/menu";
+    // const url = "http://localhost:8080/menu?restaurantName=Spicy%20Palace";
+    const url = "http://localhost:8080/menu?restaurantName=Vegan%20Bistro";
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -75,21 +32,9 @@ async function getMenuItems() {
   }
 }
 
-// async function appendMenuItems() {
-//     const menuItems = await getMenuItems();  // Wait for the fetched data
-//   if (menuItems && menuItems.length) {
-//     const menuList = document.getElementById('menu-list');  // Assuming you have a list element
-//     menuItems.forEach(item => {
-//       const listItem = document.createElement('li');
-//       listItem.textContent = item.name;  // Customize to your object structure
-//       menuList.appendChild(listItem);  // Append to the list
-//     });
-//   }
-// }
-
 const menuList = await getMenuItems();
 
-export function MenuCard( { className, cards=menuList } ) {
+export function MenuCard( { className, cardsList=menuList } ) {
     const [active, setActive] = useState(null);
     const [count, setCount] = useState(0);
     const ref = useRef(null);
@@ -190,7 +135,7 @@ export function MenuCard( { className, cards=menuList } ) {
 
             {/* Cards */}
             <ul className="max-w-2xl mx-auto w-full gap-4">
-                {cards.map((card) => (
+                {cardsList?.map((card) => (
                     <motion.div
                         key={card.src}
                         layoutId={`card-${card.title}-${id}`}
@@ -204,12 +149,6 @@ export function MenuCard( { className, cards=menuList } ) {
                             </div>
                         </motion.div>
                         <div className="">
-                            {/* <motion.h3
-                                layoutId={`title-${card.title}-${id}`}
-                                className="font-medium text-neutral-800 dark:text-neutral-200 text-center md:text-left"
-                            >
-                                {card.title}
-                            </motion.h3> */}
                             <motion.h3
                                 layoutId={`title-${card.itemName}-${id}`}
                                 className="font-medium text-neutral-800 dark:text-neutral-200 text-center md:text-left"
@@ -252,5 +191,5 @@ export default MenuCard;
 
 MenuCard.propTypes = {
     className: PropTypes.string,
-    cards: PropTypes.array,
+    cardsList: PropTypes.array,
 };

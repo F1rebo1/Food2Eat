@@ -11,9 +11,9 @@ router.post('/add-menu-item', async (req, res) => {
 router.get('/menu', async (req, res) => {
     const db = await connectToDatabase();
 
-    if (req.query.itemName) {
+    if (req.query.itemName && req.query.restaurantName) {
         await controller.getMenuItem(req, res, db);
-    } else {
+    } else if (req.query.restaurantName) {
         await controller.getAllMenuItems(req, res, db);
     }
 });
