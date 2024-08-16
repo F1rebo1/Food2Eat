@@ -1,6 +1,9 @@
-require('dotenv').config({ path: '.env.local' });
+/*global process*/
+import dotenv from 'dotenv';
 
-const { MongoClient, ObjectId } = require('mongodb');
+dotenv.config({ path: '.env.local' });
+
+import { MongoClient } from 'mongodb';
 
 async function seedDatabase() {
     const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
@@ -27,14 +30,15 @@ async function seedDatabase() {
 
         // 2. Insert Menu Items
         const menuInfo = database.collection("Menu");
-        let pongal, butterChicken;
+        let pongal, butterChicken, idli, gheeRoast, samosa;
         try {
             pongal = await menuInfo.insertOne({
                 restaurantId: veganBistro.insertedId,
                 itemName: "Pongal",
                 price: 7.99,
                 categories: ["vegan", "vegetarian", "gluten free"],
-                pictureURL: "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/01/pongal-ven-pongal-500x500.jpg"
+                description: "A rice and lentil porridge, made with black pepper, ginger, turmeric, cashews, cumin, curry leaves, ghee (clarified butter), mung beans, and salt",
+                src: "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/01/pongal-ven-pongal-500x500.jpg"
             });
             console.log("Inserted Pongal Menu Item:", pongal.insertedId);
         } catch (err) {
@@ -47,11 +51,54 @@ async function seedDatabase() {
                 itemName: "Butter Chicken",
                 price: 12.99,
                 categories: ["spicy"],
-                pictureURL: "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg"
+                description: "A chicken curry made with a spiced tomato and butter (makhan) sauce",
+                src: "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg"
             });
             console.log("Inserted Butter Chicken Menu Item:", butterChicken.insertedId);
         } catch (err) {
             console.error('Failed to insert Butter Chicken Menu Item:', err.message);
+        }
+
+        try {
+            idli = await menuInfo.insertOne({
+                restaurantId: veganBistro.insertedId,
+                itemName: "Pongal",
+                price: 6.99,
+                categories: ["vegan", "vegetarian"],
+                description: "A a soft and fluffy steamed rice cake made from a batter of fermented rice",
+                src: "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/04/idli-recipe.jpg"
+            });
+            console.log("Inserted Idli Menu Item:", idli.insertedId);
+        } catch (err) {
+            console.error('Failed to insert Idli Menu Item:', err.message);
+        }
+
+        try {
+            gheeRoast = await menuInfo.insertOne({
+                restaurantId: veganBistro.insertedId,
+                itemName: "Ghee Roast Dosa",
+                price: 11.99,
+                categories: ["vegetarian"],
+                description: "A thin, savory, fermented pancake or crepe made from rice and lentil batter",
+                src: "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/12/dosa-recipe.jpg"
+            });
+            console.log("Inserted Ghee Roast Dosa Menu Item:", gheeRoast.insertedId);
+        } catch (err) {
+            console.error('Failed to insert Ghee Roast Dosa Menu Item:', err.message);
+        }
+
+        try {
+            samosa = await menuInfo.insertOne({
+                restaurantId: spicyPalace.insertedId,
+                itemName: "Samosa",
+                price: 4.99,
+                categories: ["spicy"],
+                description: "A crispy, deep-fried pastry snack filled with vegetables, spiced potatoes, onions and peas",
+                src: "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/12/samosa-recipe.jpg"
+            });
+            console.log("Inserted Samosa Menu Item:", samosa.insertedId);
+        } catch (err) {
+            console.error('Failed to insert Samosa Menu Item:', err.message);
         }
 
         // 3. Insert Customers

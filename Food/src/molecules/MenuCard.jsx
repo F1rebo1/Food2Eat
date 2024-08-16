@@ -1,0 +1,256 @@
+/*global process*/
+// "use client";
+import React, { useEffect, useId, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useOutsideClick } from "../hooks/useOutsideClick.js";
+import PropTypes from 'prop-types';
+import clsx from "clsx";
+
+// TODO: Figure out how to get all menu items for the desired restaurant, append them to menuList, and then iterate over and display each item as a card
+
+// Sample inserted menu item
+// restaurantId: spicyPalace.insertedId,
+// itemName: "Butter Chicken",
+// price: 12.99,
+// categories: ["spicy"],
+// description: "A chicken curry made with a spiced tomato and butter (makhan) sauce",
+// pictureURL: "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg"
+
+const cardList = [
+    {
+        description: "Ven Pongal",
+        title: "Pongal",
+        src: "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/01/pongal-ven-pongal-500x500.jpg",
+        ctaText: "Order",
+        ctaLink: "https://ui.aceternity.com/templates",
+        content: "A rice and lentil porridge, made with black pepper, ginger, turmeric, cashews, cumin, curry leaves, ghee (clarified butter), mung beans, and salt"
+    },
+    {
+        description: "Babbu Maan",
+        title: "Mitran Di Chhatri",
+        src: "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg",
+        ctaText: "Order",
+        ctaLink: "https://ui.aceternity.com/templates",
+        content: "Babu Maan, a legendary Punjabi singer, is renowned for his soulful"
+    },
+
+    {
+        description: "Metallica",
+        title: "For Whom The Bell Tolls",
+        src: "https://assets.aceternity.com/demos/metallica.jpeg",
+        ctaText: "Order",
+        ctaLink: "https://ui.aceternity.com/templates",
+        content: "Metallica, an iconic American heavy metal band, is renowned for their"
+    },
+    {
+        description: "Led Zeppelin",
+        title: "Stairway To Heaven",
+        src: "https://assets.aceternity.com/demos/led-zeppelin.jpeg",
+        ctaText: "Order",
+        ctaLink: "https://ui.aceternity.com/templates",
+        content: "Led Zeppelin, a legendary British rock band, is renowned for their"
+    },
+    {
+        description: "Mustafa Zahid",
+        title: "Toh Phir Aao",
+        src: "https://assets.aceternity.com/demos/toh-phir-aao.jpeg",
+        ctaText: "Order",
+        ctaLink: "https://ui.aceternity.com/templates",
+        content: "renowned for its intense storyline and powerful performances. Directed"
+    },
+];
+
+async function getMenuItems() {
+    const url = "http://localhost:8080/menu";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+// async function appendMenuItems() {
+//     const menuItems = await getMenuItems();  // Wait for the fetched data
+//   if (menuItems && menuItems.length) {
+//     const menuList = document.getElementById('menu-list');  // Assuming you have a list element
+//     menuItems.forEach(item => {
+//       const listItem = document.createElement('li');
+//       listItem.textContent = item.name;  // Customize to your object structure
+//       menuList.appendChild(listItem);  // Append to the list
+//     });
+//   }
+// }
+
+const menuList = await getMenuItems();
+
+export function MenuCard( { className, cards=menuList } ) {
+    const [active, setActive] = useState(null);
+    const [count, setCount] = useState(0);
+    const ref = useRef(null);
+    const id = useId();
+
+    useEffect(() => {
+        function onKeyDown(event) {
+            if (event.key === "Escape") {
+                setActive(false);
+            }
+        }
+
+        if (active) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [active]);
+
+    useOutsideClick(ref, () => setActive(null));
+
+    return (
+        <>
+            <AnimatePresence>
+                {active && (
+                    <>
+                        {/* Overlay */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className={clsx("fixed inset-0 bg-black/20 h-full w-full z-10", className)}
+                        />
+
+                        {/* Popup */}
+                        <div className="fixed inset-0 grid place-items-center z-[100] bg-green-200">
+                            <motion.div
+                                layoutId={`card-${active.itemName}-${id}`}
+                                ref={ref}
+                                className="w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
+                            >
+                                <motion.div layoutId={`image-${active.itemName}-${id}`}>
+                                    <img src={active.src} width="250" height="260" />
+                                </motion.div>
+
+                                <div>
+                                    <div className="flex justify-between items-start p-4">
+                                        <motion.h3
+                                            layoutId={`title-${active.itemName}-${id}`}
+                                            className="font-bold text-neutral-700 dark:text-neutral-200"
+                                        >
+                                            {active.itemName}
+                                        </motion.h3>
+                                        <motion.p
+                                            layoutId={`description-${active.description}-${id}`}
+                                            className="text-neutral-600 dark:text-neutral-400"
+                                        >
+                                            {active.categories}
+                                        </motion.p>
+                                    </div>
+
+                                    <motion.a
+                                        layoutId={`button-${active.itemName}-${id}`}
+                                        // href={active.ctaLink}
+                                        target="_blank"
+                                        className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
+                                    >
+                                        <button onClick={() => setCount((count) => count + 1)}>
+                                            Order {count}
+                                        </button>
+                                    </motion.a>
+                                </div>
+
+                                <div className="pt-4 relative px-4">
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400"
+                                    >
+                                        {/* {typeof active.content === "function"
+                                            ? active.content()
+                                            : active.content} */}
+                                        {typeof active.content === "function"
+                                            ? active.description
+                                            : active.description}
+                                    </motion.div>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </>
+                )}
+            </AnimatePresence>
+
+            {/* Cards */}
+            <ul className="max-w-2xl mx-auto w-full gap-4">
+                {cards.map((card) => (
+                    <motion.div
+                        key={card.src}
+                        layoutId={`card-${card.title}-${id}`}
+                        onClick={() => setActive(card)}
+                        className="p-4 flex flex-col md:flex-row justify-between items-center bg-blue-200 hover:bg-green-100 dark:hover:bg-green-300 rounded-xl cursor-pointer border-2 border-solid border-red-500"
+                    >
+                        <motion.div layoutId={`image-${card.title}-${id}`}>
+                            <div className="w-full h-40 lg:h-40 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top">
+                                <img src={card.src} width="100" height="100" />
+                                {/* {card.title} */}
+                            </div>
+                        </motion.div>
+                        <div className="">
+                            {/* <motion.h3
+                                layoutId={`title-${card.title}-${id}`}
+                                className="font-medium text-neutral-800 dark:text-neutral-200 text-center md:text-left"
+                            >
+                                {card.title}
+                            </motion.h3> */}
+                            <motion.h3
+                                layoutId={`title-${card.itemName}-${id}`}
+                                className="font-medium text-neutral-800 dark:text-neutral-200 text-center md:text-left"
+                            >
+                                {card.itemName}
+                            </motion.h3>
+                            <motion.p
+                                layoutId={`description-${card.description}-${id}`}
+                                className="text-neutral-600 dark:text-neutral-400 text-center md:text-left"
+                            >
+                                {card.description}
+                            </motion.p>
+                        </div>
+                    </motion.div>
+                ))}
+            </ul>
+        </>
+    );
+}
+
+export const CloseIcon = () => (
+    <motion.svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-4 w-4 text-black"
+    >
+        <path d="M18 6L6 18" />
+        <path d="M6 6l12 12" />
+    </motion.svg>
+);
+
+export default MenuCard;
+
+MenuCard.propTypes = {
+    className: PropTypes.string,
+    cards: PropTypes.array,
+};

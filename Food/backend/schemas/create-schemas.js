@@ -1,6 +1,9 @@
-require('dotenv').config({ path: '.env.local' });
+/*global process*/
+import dotenv from 'dotenv';
 
-const { MongoClient } = require('mongodb');
+dotenv.config({ path: '.env.local' });
+
+import { MongoClient } from 'mongodb';
 
 async function createCollectionWithSchema() {
     const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
@@ -114,7 +117,7 @@ async function createCollectionWithSchema() {
                 $jsonSchema: {
                     bsonType: "object",
                     title: "Menu",
-                    required: ["_id", "restaurantId", "itemName", "price", "categories"],
+                    required: ["_id", "restaurantId", "itemName", "price", "categories", "description"],
                     properties: {
                         _id: {
                             bsonType: "objectId"
@@ -134,7 +137,10 @@ async function createCollectionWithSchema() {
                                 bsonType: "string"
                             }
                         },
-                        pictureURL: {
+                        description: {
+                            bsonType: "string"
+                        },
+                        src: {
                             bsonType: "string"
                         },
                     }
