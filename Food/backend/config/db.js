@@ -1,5 +1,9 @@
-const { MongoClient } = require('mongodb');
-require('dotenv').config({ path: '.env.local' });
+/*global process*/
+import { MongoClient } from 'mongodb';
+// require('dotenv').config({ path: '.env.local' });
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env.local' });
 
 const uri = process.env.MONGODB_URI;
 let db;
@@ -12,4 +16,4 @@ const connectToDatabase = async () => {
     return db;
 };
 
-module.exports = connectToDatabase;
+export default connectToDatabase;

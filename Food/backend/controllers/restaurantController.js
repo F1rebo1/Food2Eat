@@ -1,6 +1,6 @@
-const { ObjectId } = require('mongodb');
+import { ObjectId } from 'mongodb';
 
-const debug = require('../utils/printDebugs');
+import debug from '../utils/printDebugs.js';
 
 const addRestaurant = async (req, res, db) => {
     try {
@@ -25,6 +25,52 @@ const getAllRestaurants = async (req, res, db) => {
         res.status(200).json(restaurants);
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch all restaurants', details: err.message });
+    }
+};
+
+const getAllCuisines = async (req, res, db) => {
+    try {
+        if (debug) console.log("[restaurantController.js - getAllCuisines]");
+        const restaurants = await db.collection('RestaurantInfo').find().toArray();
+
+        const cuisinesList = [];
+        const set = new Set();
+        for (let index = 0; index < restaurants.length; index++) {
+            let cuisine = restaurants[index].cuisine;
+            if(!set.has(cuisine)){
+                cuisinesList.push(cuisine);
+                set.add(cuisine);
+            }
+        }
+        res.status(200).json(cuisinesList);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch all cuisines', details: err.message });
+    }
+};
+
+const getAllRestaurantsForSelectedCuisine = async (req, res, db) => {
+    try {
+        if (debug) console.log("[restaurantController.js - getAllRestaurantsForSelectedCuisine]");
+        const restaurants = await db.collection('RestaurantInfo').find().toArray();
+
+        // We should pass in the desired cuisine selected/entered by the user in the body of a post request from the search bar/all restaurants page
+        // const selectedCuisine = req.body.cuisine;
+        
+        // For the time being, I shall pass selectedCuisine in the query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedCuisine = urlParams.get('cuisine');
+
+        const restaurantList = []; // This will contain a list of restaurant objects (so we have all data, including name, location, rating, cuisine)
+        for (let index = 0; index < restaurants.length; index++) {
+            let restaurant = restaurant[index];
+            let cuisine = restaurants.cuisine;
+            if(cuisine === selectedCuisine){
+                restaurantList.push(restaurant);
+            }
+        }
+        res.status(200).json(restaurantList);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch all restaurants for desired cuisine', details: err.message });
     }
 };
 
@@ -105,10 +151,12 @@ const deleteRestaurant = async (req, res, db) => {
     }
 };
 
-module.exports = {
+export default {
     addRestaurant,
     getAllRestaurants,
     getRestaurantByName,
+    getAllCuisines,
+    getAllRestaurantsForSelectedCuisine,
     updateRestaurant,
     deleteRestaurant,
 };

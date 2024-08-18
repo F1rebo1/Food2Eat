@@ -1,6 +1,6 @@
-const { ObjectId } = require('mongodb');
+import { ObjectId } from 'mongodb';
 
-const debug = require('../utils/printDebugs');
+import debug from '../utils/printDebugs.js';
 
 const addOrder = async (req, res, db) => {
     try {
@@ -97,7 +97,7 @@ const deleteOrder = async (req, res, db) => {
     }
 };
 
-module.exports = {
+export default {
     addOrder,
     getAllOrders,
     getOrderByCustomerId,

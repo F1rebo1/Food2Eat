@@ -1,16 +1,22 @@
-require('dotenv').config({ path: '.env.local' });
+/*global process*/
+// require('dotenv').config({ path: '.env.local' });
 
-const express = require('express');
-const restaurantRoutes = require('./routes/restaurantRoutes');
-const customerRoutes = require('./routes/customerRoutes');
-const orderRoutes = require('./routes/orderRoutes');
-const menuRoutes = require('./routes/menuRoutes');
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
+import cors from 'cors';
+import express, { json, urlencoded } from 'express';
+import restaurantRoutes from './routes/restaurantRoutes.js';
+import customerRoutes from './routes/customerRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import menuRoutes from './routes/menuRoutes.js';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.use(express.json()); // To parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies (for form submissions)
+app.use(cors()); // To allow CORS
+app.use(json()); // To parse JSON bodies
+app.use(urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies (for form submissions)
 
 app.use(restaurantRoutes);
 app.use(customerRoutes);
