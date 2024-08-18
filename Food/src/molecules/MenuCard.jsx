@@ -1,4 +1,3 @@
-/*global process*/
 // "use client";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -16,29 +15,43 @@ import clsx from "clsx";
 // description: "A chicken curry made with a spiced tomato and butter (makhan) sauce",
 // pictureURL: "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg"
 
-async function getMenuItems() {
-    // const url = "http://localhost:8080/menu?restaurantName=Spicy%20Palace";
-    const url = "http://localhost:8080/menu?restaurantName=Vegan%20Bistro";
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
+// Asynchronous function to get menu items
+async function getMenuItems(restaurantName) {
+    try {
+        const url = `http://localhost:8080/menu?restaurantName=${restaurantName}`
+        const response = await fetch(url);
+        if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+        }
 
-    const json = await response.json();
-    return json;
-  } catch (error) {
-    console.error(error.message);
-  }
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
-const menuList = await getMenuItems();
-
-export function MenuCard( { className, cardsList=menuList } ) {
-    const [active, setActive] = useState(null);
+export function MenuCard( { className } ) {
     const [count, setCount] = useState(0);
+
+    // States for menu items and restaurant name
+    const [menuList, setMenuList] = useState([]);
+    const [restaurantName, setRestaurantName] = useState(null);
+
+    // Aceternity Expandable Card references
+    const [active, setActive] = useState(null);
     const ref = useRef(null);
     const id = useId();
+
+    useEffect(() => {
+        // Parse the restaurantName from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('restaurantName');
+        setRestaurantName(name);
+
+        // Check if the restaurant exists
+        if (name) getMenuItems(name).then(data => setMenuList(data || []));  // Adding navigate to the dependency array ensures it's updated correctly
+    });
 
     useEffect(() => {
         function onKeyDown(event) {
@@ -73,7 +86,7 @@ export function MenuCard( { className, cardsList=menuList } ) {
                         />
 
                         {/* Popup */}
-                        <div className="fixed inset-0 grid place-items-center z-[100] bg-green-200">
+                        <div className="fixed inset-0 grid place-items-center z-[100] bg-slate-800 bg-opacity-75">
                             <motion.div
                                 layoutId={`card-${active.itemName}-${id}`}
                                 ref={ref}
@@ -135,7 +148,7 @@ export function MenuCard( { className, cardsList=menuList } ) {
 
             {/* Cards */}
             <ul className="max-w-2xl mx-auto w-full gap-4">
-                {cardsList?.map((card) => (
+                {menuList?.map((card) => (
                     <motion.div
                         key={card.src}
                         layoutId={`card-${card.title}-${id}`}
@@ -175,7 +188,7 @@ export const CloseIcon = () => (
         width="24"
         height="24"
         viewBox="0 0 24 24"
-        fill="none"
+        fill="#FFFFFF"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
