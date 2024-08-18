@@ -1,13 +1,3 @@
-// /** @type {import('tailwindcss').Config} */
-// export const content = [
-//   "./src/**/*.{html,js,jsx}", // Add support for JSX/TSX if you're using React components
-//   "./index.html", // Make sure the HTML files are scanned too
-// ];
-// export const theme = {
-//   extend: {},
-// };
-// export const plugins = [];
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -15,7 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        maroon: "#7A0019",
+        gold: "#FFCC33",
+      }
+    },
   },
   plugins: [],
 }
