@@ -56,15 +56,16 @@ const getAllRestaurantsForSelectedCuisine = async (req, res, db) => {
         // We should pass in the desired cuisine selected/entered by the user in the body of a post request from the search bar/all restaurants page
         // const selectedCuisine = req.body.cuisine;
         
-        // For the time being, I shall pass selectedCuisine in the query parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const selectedCuisine = urlParams.get('cuisine');
+        // For the time being, I shall pass selectedCuisine in the query parameter                
+        const selectedCuisine = req.query.cuisine;
+        console.log(selectedCuisine);
 
         const restaurantList = []; // This will contain a list of restaurant objects (so we have all data, including name, location, rating, cuisine)
         for (let index = 0; index < restaurants.length; index++) {
-            let restaurant = restaurant[index];
-            let cuisine = restaurants.cuisine;
+            const restaurant = restaurants[index];                    
+            const cuisine = restaurant.cuisine;
             if(cuisine === selectedCuisine){
+                // console.log("restaurant = " + restaurant.restaurantName + ", cuisine = " + cuisine);
                 restaurantList.push(restaurant);
             }
         }
