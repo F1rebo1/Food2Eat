@@ -1,27 +1,16 @@
-// "use client";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "../hooks/useOutsideClick.js";
 import PropTypes from 'prop-types';
 import clsx from "clsx";
 
-// TODO: Figure out how to get all menu items for the desired restaurant, append them to menuList, and then iterate over and display each item as a card
-
-// Sample inserted menu item
-// restaurantId: spicyPalace.insertedId,
-// itemName: "Butter Chicken",
-// price: 12.99,
-// categories: ["spicy"],
-// description: "A chicken curry made with a spiced tomato and butter (makhan) sauce",
-// pictureURL: "https://cafedelites.com/wp-content/uploads/2019/01/Butter-Chicken-IMAGE-64.jpg"
-
 // Asynchronous function to get menu items
 async function getMenuItems(restaurantName) {
     try {
-        const url = `http://localhost:8080/menu?restaurantName=${restaurantName}`
+        const url = `http://localhost:8080/menu?restaurantName=${restaurantName}`;
         const response = await fetch(url);
         if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+            throw new Error(`Response status: ${response.status}`);
         }
 
         const json = await response.json();
@@ -33,8 +22,6 @@ async function getMenuItems(restaurantName) {
 
 export function MenuCard( { className } ) {
     const [count, setCount] = useState(0);
-
-    // States for menu items and restaurant name
     const [menuList, setMenuList] = useState([]);
     const [restaurantName, setRestaurantName] = useState(null);
 
@@ -43,15 +30,19 @@ export function MenuCard( { className } ) {
     const ref = useRef(null);
     const id = useId();
 
+    // Parse the restaurantName from the URL once when the component mounts
     useEffect(() => {
-        // Parse the restaurantName from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const name = urlParams.get('restaurantName');
         setRestaurantName(name);
+    }, []);  // Only run once when the component mounts
 
-        // Check if the restaurant exists
-        if (name) getMenuItems(name).then(data => setMenuList(data || []));  // Adding navigate to the dependency array ensures it's updated correctly
-    });
+    // Fetch menu items when restaurantName is set
+    useEffect(() => {
+        if (restaurantName) {
+            getMenuItems(restaurantName).then(data => setMenuList(data || []));
+        }
+    }, [restaurantName]);  // Only run when restaurantName changes
 
     useEffect(() => {
         function onKeyDown(event) {
@@ -114,7 +105,6 @@ export function MenuCard( { className } ) {
 
                                     <motion.a
                                         layoutId={`button-${active.itemName}-${id}`}
-                                        // href={active.ctaLink}
                                         target="_blank"
                                         className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
                                     >
@@ -132,12 +122,7 @@ export function MenuCard( { className } ) {
                                         exit={{ opacity: 0 }}
                                         className="text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400"
                                     >
-                                        {/* {typeof active.content === "function"
-                                            ? active.content()
-                                            : active.content} */}
-                                        {typeof active.content === "function"
-                                            ? active.description
-                                            : active.description}
+                                        {active.description}
                                     </motion.div>
                                 </div>
                             </motion.div>
@@ -158,7 +143,6 @@ export function MenuCard( { className } ) {
                         <motion.div layoutId={`image-${card.title}-${id}`}>
                             <div className="w-full h-40 lg:h-40 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top">
                                 <img src={card.src} width="100" height="100" />
-                                {/* {card.title} */}
                             </div>
                         </motion.div>
                         <div className="">

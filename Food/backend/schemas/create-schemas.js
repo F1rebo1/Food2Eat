@@ -155,7 +155,7 @@ async function createCollectionWithSchema() {
                 $jsonSchema: {
                     bsonType: "object",
                     title: "RestaurantInfo",
-                    required: ["_id", "restaurantName", "address", "rating"],
+                    required: ["_id", "restaurantName", "address", "cuisine", "rating"],
                     properties: {
                         _id: {
                             bsonType: "objectId"
@@ -164,6 +164,9 @@ async function createCollectionWithSchema() {
                             bsonType: "string"
                         },
                         address: {
+                            bsonType: "string"
+                        },
+                        cuisine: {
                             bsonType: "string"
                         },
                         rating: {

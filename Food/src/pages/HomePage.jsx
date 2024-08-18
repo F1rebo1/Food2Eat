@@ -1,7 +1,7 @@
 import React from 'react';
 import '../index.css';
 import Navbar from '../organisms/Navbar.jsx';
-import SearchBar from '../organisms/SearchBar.jsx';
+// import SearchBar from '../organisms/SearchBar.jsx';
 import CommandMenu from '../molecules/CommandSearch.jsx';
 
 function HomePage() {
