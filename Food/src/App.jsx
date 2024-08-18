@@ -6,6 +6,7 @@ import './index.css';
 import HomePage from "./pages/HomePage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import MenuPage from "./pages/MenuPage.jsx";
+import RestaurantPage from "./pages/RestaurantsPage.jsx";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/restaurants" element={<RestaurantPage />} />
       </Routes>
     </BrowserRouter>
     </>

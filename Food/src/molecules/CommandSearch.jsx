@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Command } from 'cmdk';
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 
 const inputStyles = 'w-full p-2 bg-neutral-800 text-white placeholder-gray-400 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500'; 
 const listItemStyles = 'flex items-center p-2 rounded-md cursor-pointer hover:bg-maroon active:bg-gold'; 
@@ -8,6 +9,7 @@ const activeItemStyles = 'bg-maroon text-white';
 const separatorStyle = 'border-t border-gray-700 my-2';
 
 export function CommandDemo() {
+    const navigate = useNavigate();
   const [restaurantList, setRestaurantList] = useState([]);
   const [cuisineList, setCuisineList] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null); // Track index for hover
@@ -37,8 +39,11 @@ export function CommandDemo() {
     fetchCuisines();
   }, []);
 
-  const handleSelect = (item) => {
+  const handleSelect = (item, selectionType) => {
     console.log(`Selected: ${item}`);
+
+    if(selectionType === "cuisine") navigate(`/restaurants?cuisine=${item}`);
+    else navigate(`/menu?restaurantName=${item}`);
   };
 
   const handleMouseEnter = (index) => {
@@ -65,7 +70,7 @@ export function CommandDemo() {
                 key={restaurant._id}
                 tabIndex="0"
                 className={clsx(listItemStyles, hoveredIndex === index && activeItemStyles)}
-                onSelect={() => handleSelect(restaurant.restaurantName)}
+                onSelect={() => handleSelect(restaurant.restaurantName,"restaurant")}
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={handleMouseLeave}
               >
@@ -82,7 +87,7 @@ export function CommandDemo() {
                 key={cuisine}
                 tabIndex="0"
                 className={clsx(listItemStyles, hoveredIndex === index + restaurantList.length && activeItemStyles)}
-                onSelect={() => handleSelect(cuisine)}
+                onSelect={() => handleSelect(cuisine,"cuisine")}
                 onMouseEnter={() => handleMouseEnter(index + restaurantList.length)}
                 onMouseLeave={handleMouseLeave}
               >
