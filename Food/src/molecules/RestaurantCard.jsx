@@ -95,17 +95,9 @@ export function RestaurantCard( { className } ) {
                                 ref={ref}
                                 className="w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
                             >
-                                {/* <motion.div layoutId={`image-${active.itemName}-${id}`}>
-                                    <img src={active.src} width="250" height="260" />
-                                </motion.div> */}
-
-                                {/* const veganBistro = await restaurantInfo.insertOne({
-                                    restaurantName: "Vegan Bistro",
-                                    address: "123 Vegan Street, Plant City",
-                                    cuisine: "South Indian",
-                                    rating: 4.5,
-                                }); */}
-
+                                <motion.div layoutId={`image-${active.itemName}-${id}`}>
+                                    <img src={active.src} />
+                                </motion.div>
                                 <div>
                                     <div className="flex justify-between items-start p-4">
                                         <motion.h3
@@ -160,9 +152,9 @@ export function RestaurantCard( { className } ) {
                         className="p-4 flex flex-col md:flex-row justify-between items-center bg-blue-200 hover:bg-green-100 dark:hover:bg-green-300 rounded-xl cursor-pointer border-2 border-solid border-red-500"
                     >
                         <motion.div layoutId={`image-${card.title}-${id}`}>
-                            {/* <div className="w-full h-40 lg:h-40 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top">
+                            <div className="w-full h-40 lg:h-40 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top">
                                 <img src={card.src} width="100" height="100" />
-                            </div> */}
+                            </div>
                         </motion.div>
                         <div className="">
                             <motion.h3

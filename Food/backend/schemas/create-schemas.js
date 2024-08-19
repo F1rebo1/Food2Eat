@@ -172,6 +172,9 @@ async function createCollectionWithSchema() {
                         rating: {
                             bsonType: "double"
                         },
+                        src: {
+                            bsonType: "string"
+                        },
                     }
                 }
             }

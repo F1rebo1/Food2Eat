@@ -20,24 +20,28 @@ async function seedDatabase() {
             address: "123 Vegan Street, Plant City",
             cuisine: "South Indian",
             rating: 4.5,
+            src: "https://www.worldofvegan.com/wp-content/uploads/2022/04/vegetarian-restaurant-vegan-food-near-me.webp",
         });
         const spicyPalace = await restaurantInfo.insertOne({
             restaurantName: "Spicy Palace",
             address: "456 Spice Avenue, Flavor Town",
             cuisine: "North Indian",
             rating: 4.7,
+            src: "https://lh6.googleusercontent.com/proxy/_H7PnR3YLggOMju_hwEKcQvlDMhYvqCMePCYDwrBMGWm3s--TUsBtfP0nFwzAzau-TOlxR-c7leNhxrHjpxGhooanxvCSFuJ",
         });
         const churyce = await restaurantInfo.insertOne({
             restaurantName: "Churyce",
             address: "409 14th Ave SE, Minneapolis, MN 55414",
             cuisine: "Korean",
             rating: 4.7,
+            src: "https://static.wixstatic.com/media/726e11_9c5baf1083534076a26060e53db62813~mv2.png/v1/fit/w_2500,h_1330,al_c/726e11_9c5baf1083534076a26060e53db62813~mv2.png",
         });
         const wallys = await restaurantInfo.insertOne({
             restaurantName: "Wally's Falafel and Hummus",
             address: "417 14th Ave SE, Minneapolis, MN 55414",
             cuisine: "Mediterranean",
             rating: 4.4,
+            src: "https://images.happycow.net/venues/1024/18/12/hcmp181223_1422350.jpeg",
         });
 
         console.log("Inserted Restaurants:", veganBistro.insertedId, spicyPalace.insertedId, churyce.insertedId, wallys.insertedId);
@@ -97,25 +101,25 @@ async function seedDatabase() {
         console.log("Inserted Vegan Bistro Menu Items:", pongal.insertedId, idli.insertedId, gheeRoast.insertedId);
 
         // Churyce Menu Items
-        const bulgogiKimbap = await menuInfo.insertOne({
-            restaurantId: churyce.insertedId,
-            itemName: "Bulgogi Kimbap",
-            price: 8.99,
-            categories: ["savory"],
-            description: "Bulgogi, carrot, pickled raddish, egg, lettuce, seasoned rice rolled with seaweed sheet.",
-            src: "https://static.wixstatic.com/media/726e11_a468d132df4b4a5eb7b432f7ed00efcc~mv2.jpg/v1/fill/w_232,h_232,usm_1.20_1.00_0.01/file.webp",
-        });
+        // const bulgogiKimbap = await menuInfo.insertOne({
+        //     restaurantId: churyce.insertedId,
+        //     itemName: "Bulgogi Kimbap",
+        //     price: 8.99,
+        //     categories: ["savory"],
+        //     description: "Bulgogi, carrot, pickled raddish, egg, lettuce, seasoned rice rolled with seaweed sheet.",
+        //     src: "https://static.wixstatic.com/media/726e11_a468d132df4b4a5eb7b432f7ed00efcc~mv2.jpg/v1/fill/w_232,h_232,usm_1.20_1.00_0.01/file.webp",
+        // });
 
-        const donkatsu = await menuInfo.insertOne({
-            restaurantId: churyce.insertedId,
-            itemName: "Donkatsu",
-            price: 15.99,
-            categories: ["savory"],
-            description: "Pork cutlet with cabbage salad and rice topped with ChuRyce house sauce.",
-            src: "https://static.wixstatic.com/media/726e11_fb89ca26fd9540a0bae19ae952767afb~mv2.jpg/v1/fill/w_232,h_232,usm_1.20_1.00_0.01/file.webp",
-        });
+        // const donkatsu = await menuInfo.insertOne({
+        //     restaurantId: churyce.insertedId,
+        //     itemName: "Donkatsu",
+        //     price: 15.99,
+        //     categories: ["savory"],
+        //     description: "Pork cutlet with cabbage salad and rice topped with ChuRyce house sauce.",
+        //     src: "https://static.wixstatic.com/media/726e11_fb89ca26fd9540a0bae19ae952767afb~mv2.jpg/v1/fill/w_232,h_232,usm_1.20_1.00_0.01/file.webp",
+        // });
 
-        console.log("Inserted Churyce Menu Items:", bulgogiKimbap.insertedId, donkatsu.insertedId);
+        // console.log("Inserted Churyce Menu Items:", bulgogiKimbap.insertedId, donkatsu.insertedId);
 
         // Wally's Menu Items
         const spicyMusahabWrap = await menuInfo.insertOne({
@@ -224,14 +228,14 @@ async function seedDatabase() {
             timestamp: new Date()
         });
 
-        const order3 = await orderDetails.insertOne({
-            customerId: cust3.insertedId,
-            menuItemId: bulgogiKimbap.insertedId,
-            restaurantId: churyce.insertedId,
-            quantity: 3,
-            date: new Date(),
-            timestamp: new Date()
-        });
+        // const order3 = await orderDetails.insertOne({
+        //     customerId: cust3.insertedId,
+        //     menuItemId: bulgogiKimbap.insertedId,
+        //     restaurantId: churyce.insertedId,
+        //     quantity: 3,
+        //     date: new Date(),
+        //     timestamp: new Date()
+        // });
 
         const order4 = await orderDetails.insertOne({
             customerId: cust4.insertedId,
@@ -242,7 +246,8 @@ async function seedDatabase() {
             timestamp: new Date()
         });
 
-        console.log("Inserted Orders:", order1.insertedId, order2.insertedId, order3.insertedId, order4.insertedId);
+        // console.log("Inserted Orders:", order1.insertedId, order2.insertedId, order3.insertedId, order4.insertedId);
+        console.log("Inserted Orders:", order1.insertedId, order2.insertedId, order4.insertedId);
 
     } finally {
         await client.close();

@@ -84,7 +84,7 @@ export function MenuCard( { className } ) {
                                 className="w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
                             >
                                 <motion.div layoutId={`image-${active.itemName}-${id}`}>
-                                    <img src={active.src} width="250" height="260" />
+                                    <img src={active.src} />
                                 </motion.div>
 
                                 <div>
@@ -135,7 +135,7 @@ export function MenuCard( { className } ) {
             <ul className="max-w-2xl mx-auto w-full gap-4">
                 {menuList?.map((card) => (
                     <motion.div
-                        key={card.src}
+                        key={`${card.src} + ${card.itemName}`}
                         layoutId={`card-${card.title}-${id}`}
                         onClick={() => setActive(card)}
                         className="p-4 flex flex-col md:flex-row justify-between items-center bg-blue-200 hover:bg-green-100 dark:hover:bg-green-300 rounded-xl cursor-pointer border-2 border-solid border-red-500"
